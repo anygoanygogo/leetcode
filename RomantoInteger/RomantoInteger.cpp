@@ -1,33 +1,57 @@
 class Solution {
 public:
     int romanToInt(string s) {
-		// Start typing your C/C++ solution below
-		// DO NOT write int main() function
-		int hash[256];
-		hash['I'] = 1; hash['V'] = 5; 
-		hash['X'] = 10; hash['L'] = 50; 
-		hash['C'] = 100; hash['D'] = 500;
-		hash['M'] = 1000;
-
-		int result = 0;
-		int num = 0;
-		for (size_t i = 0; i < s.size(); i++) {
-			if (hash[s[i]] == num) {
-				num += hash[s[i]];
-			} 
-			else if (hash[s[i]] > num) {
-				if (num) {
-					result += hash[s[i]] - num;
-					num = 0;
+		int len = s.length();
+		int pos = 0;
+		int res = 0;
+		while(pos < len-1){
+			char num = s[pos];
+			int val = getValue(s[pos]);
+			int tmp = getValue(s[pos+1]);
+			switch(num){
+			    case 'I':
+			    case 'X':
+			    case 'C':
+                                if(tmp > val){
+			            res = res + tmp - val;
+				    pos = pos + 2;
+				}else{
+				    res = res + val;
+				    pos++;
 				}
-				else num = hash[s[i]];
-			}
-			else {
-				result += num;
-				num = hash[s[i]];
+				break;
+			    case 'V':
+			    case 'L':
+			    case 'D':
+			    case 'M':
+			        res = res + val;
+			        pos++;
+			        break;
+			    default:
+				cout << "error\n";
+				return -1;
 			}
 		}
-		if (num) result += num;
-		return result;
+		if(pos < len)
+			res = res + getValue(s[pos]);
+		return res;
+    }
+	int getValue(char c){
+		int res;
+		if( c == 'I')
+			res = 1;
+		if( c == 'V')
+			res = 5;
+		if( c == 'X')
+			res = 10;
+		if( c == 'L')
+			res = 50;
+		if( c == 'C')
+			res = 100;
+		if( c == 'D')
+			res = 500;
+		if( c == 'M')
+			res = 1000;
+		return res;
 	}
 };
